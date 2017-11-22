@@ -27,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
 
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-    BluetoothLeAdvertiser bluetoothLeAdvertiser;
+    BluetoothLeAdvertiser bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
 
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static final String TAG = "MainActivity";
@@ -96,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     protected double angleR;
     int count = 0;
     protected List beaconList;
-    List<byte[]> manufacturerDataList;
 
     /**myUUID : 74278bda-b644-4520-8f0c-720eaf059935 */
 
@@ -109,16 +109,14 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         final TextView op_find = (TextView) findViewById(R.id.output_found);
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-
-        //// Detect the main Beacon frame:
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
-
-        beaconManager.bind(this);
+        /**
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));*/
 /**
+    //// Detect the main Beacon frame:
         if (checkPrerequisites()) {
             beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
             beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
@@ -126,8 +124,13 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
             beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
             beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));}
             // Transmit a beacon with Identifiers 74278bda-b644-4520-8f0c-720eaf059935 66504 66505
-*/
+
             //beacon.setExtraDataFields(new Beacon.Builder().set);
+ */
+
+        beaconManager.bind(this);
+
+
 
         //Define Button
         Button button_getData = (Button) findViewById(R.id.button_getData);
@@ -151,6 +154,19 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
 
         Log.e(TAG, "*******************BEACON DATA :"+data);
 
+        bluetoothLeScanner.startScan(new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                scanResult = result;
+                scanRecord = result.getScanRecord();
+
+                if(scanRecord.getManufacturerSpecificData() != null){
+                    Log.e(TAG, "Scan ManufacturerSpecificData: " + scanRecord.getManufacturerSpecificData());
+                }
+
+            }
+        });
 
         //Button Get and Show Data
         button_getData.setOnClickListener(new View.OnClickListener() {
@@ -177,18 +193,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                     //Find All Device near us
 
                     onResume();
-                    ScanCallback scanCallback = new ScanCallback() {
-                        @Override
-                        public void onScanResult(int callbackType, ScanResult result) {
-                            ScanRecord mScanRecord = result.getScanRecord();
-                            scanResult = result;
-                            scanRecord = mScanRecord;
-                            //int[] manufacturerData = mScanRecord.getManufacturerSpecificData(224);
-                            byte[] manufacturerData = mScanRecord.getManufacturerSpecificData(224);
-                            int mRssi = result.getRssi();
-                            System.out.print(manufacturerData + "!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        }
-                    };
+                    //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
                 }
         });
             //Show/Find Beacon
@@ -356,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         ByteBuffer mManufacturerDataMask = ByteBuffer.allocate(24);
 
 
-        /**
         UUID uuid = UUID.fromString(bluetoothAdapter.getAddress());
         byte[] uuidByte = uuidToByte(uuid);
 
@@ -369,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
             mManufacturerDataMask.put((byte)0x01);
         }
         mBuilder.setManufacturerData(224, mManufacturerData.array(), mManufacturerDataMask.array());
-        ScanFilter mScanFilter = mBuilder.build();*/
+        mBuilder.build();
     }
 
     private void setScanSettings() {
@@ -377,21 +381,9 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         ScanSettings.Builder mBuilder = new ScanSettings.Builder();
         mBuilder.setReportDelay(0);
         mBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-        ScanSettings mScanSettings = mBuilder.build();
+        mBuilder.build();
     }
 
-    protected ScanCallback scanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            ScanRecord mScanRecord = result.getScanRecord();
-            scanResult = result;
-            scanRecord = mScanRecord;
-            //int[] manufacturerData = mScanRecord.getManufacturerSpecificData(224);
-            byte[] manufacturerData = mScanRecord.getManufacturerSpecificData(224);
-            int mRssi = result.getRssi();
-            System.out.print(result.getDevice().getAddress());
-        }
-    };
 /**
     private String getScanResult(){
 
