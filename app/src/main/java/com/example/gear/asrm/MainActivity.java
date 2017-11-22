@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     private MonitoringActivity monitoringActivity;
     Identifier identifier;
 
-    Pdu pdu;
-
     ScanResult scanResult;
     ScanRecord scanRecord;
     ScanJob scanJob;
