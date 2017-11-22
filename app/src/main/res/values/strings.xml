@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Run</string>
+    <string name="tArmL">L Arm</string>
+    <string name="tArmR">R Arm</string>
+    <string name="tKneeL">L Knee</string>
+    <string name="tKneeR">R Knee</string>
+    <string name="tAnkleL">L Ankle</string>
+    <string name="tAnkleR">R Ankle</string>
+    <string name="tShinL">L Shin</string>
+    <string name="tShinR">R Shin</string>
+    <string name="tAngleL">L KneeAngle</string>
+    <string name="tAngleR">R KneeAngle</string>
+    <string name="tAllSensor"><font size="16"><b>All Sensor</b></font></string>
+    <string name="button_getData">Change Motion</string>
+    <string name="button_findAngle">Find Angle</string>
+</resources>
