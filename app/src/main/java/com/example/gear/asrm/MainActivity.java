@@ -68,19 +68,27 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     private BeaconManager beaconManager;
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
-    private Region region = new Region("All Beacon Region", null, null, null);
+    //private Region region = new Region("All Beacon Region", null, null, null);
     private MonitoringActivity monitoringActivity;
     Identifier identifier;
+    private Region region = new Region("my-beacon-region"
+            , Identifier.parse("0x2f234454f4911ba9ffa6")
+            , Identifier.parse("0x000000000001")
+            , null);
 
     ScanResult scanResult;
     ScanRecord scanRecord;
     ScanJob scanJob;
+
+    BeaconSimulator beaconSimulator;
 
     StartupBroadcastReceiver startupBroadcastReceiver;
     BeaconConsumer beaconConsumer;
     BeaconTransmitter beaconTransmitter;
     Collection<Beacon> beaconsCol;
     BeaconService beaconService;
+    RangeNotifier rangeNotifier = null;
+
 
     Callback callback;
 
@@ -109,12 +117,14 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         final TextView op_find = (TextView) findViewById(R.id.output_found);
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-        /**
-        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
-        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
-        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
-        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
-        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));*/
+
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
+
+        //rangeNotifier.didRangeBeaconsInRegion(beaconsCol, region);
 /**
     //// Detect the main Beacon frame:
         if (checkPrerequisites()) {
@@ -127,10 +137,10 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
 
             //beacon.setExtraDataFields(new Beacon.Builder().set);
  */
-
         beaconManager.bind(this);
 
-
+        //beaconList = beaconSimulator.getBeacons();
+        //Log.e(TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$beaconList : "+beaconList);
 
         //Define Button
         Button button_getData = (Button) findViewById(R.id.button_getData);
@@ -140,19 +150,37 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         body = core.getDefaultBody();
         setTextTextView(body);
 
-        Beacon beacon = new Beacon.Builder()
+        final Beacon beacon1 = new Beacon.Builder()
                 .setId1("74278bda-b644-4520-8f0c-720eaf059935")
                 .setId2("1")
                 .setId3("2")
-                .setManufacturer(0x0000)
+                .setManufacturer(76)
                 .setTxPower(-59)
                 .setDataFields(Arrays.asList(new Long[] {0l}))
+                .setBluetoothAddress("14:E3:C5:FD:C3:49")
                 .build();
-        BeaconParser beaconParser = new BeaconParser()
-                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
-        byte[] data = beaconParser.getBeaconAdvertisementData(beacon);
 
-        Log.e(TAG, "*******************BEACON DATA :"+data);
+        final Beacon beacon2 = new Beacon.Builder()
+                .setId1("74278bda-b644-4520-8f0c-720eaf059935")
+                .setId2("1")
+                .setId3("3")
+                .setManufacturer(76)
+                .setTxPower(-59)
+                .setDataFields(Arrays.asList(new Long[] {0l}))
+                .setBluetoothAddress("50:8C:B1:75:1C:3C")
+                .build();
+
+        BeaconParser beaconParser = new BeaconParser()
+                .setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT);
+
+        //beaconsCol.add(beacon1);
+        //beaconsCol.add(beacon2);
+
+        //byte[] data = beaconParser.getBeaconAdvertisementData(beacon1);
+
+
+
+        //Log.e(TAG, "*******************BEACON Distance :"+data);//[B@21bccd0f
 
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
@@ -162,11 +190,28 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                 scanRecord = result.getScanRecord();
 
                 if(scanRecord.getManufacturerSpecificData() != null){
-                    Log.e(TAG, "Scan ManufacturerSpecificData: " + scanRecord.getManufacturerSpecificData());
-                }
+                    if (scanRecord.getTxPowerLevel() > -100){
+                        Log.e(TAG, "Scan ManufacturerSpecificData: " + scanRecord.getManufacturerSpecificData());
+                        Log.e(TAG, "scanRecord.getServiceUuids : "+scanRecord.getServiceUuids());
+                        Log.e(TAG, "scanResult.getDevice().getAddress(): "+scanResult.getDevice().getAddress());
+                        Log.e(TAG, "scanResult.getDevice().getAddress(): "+scanResult.getDevice().getName());
+                        Log.e(TAG, "scanRecord.getTxPowerLevel : "+scanRecord.getTxPowerLevel());
+                        Log.e(TAG, "scanResult.getRssi : "+scanResult.getRssi());
+                        //Log.e(TAG, "scanResult. Distance : "+calculateAccuracy(scanRecord.getBytes(), scanResult.getRssi()));
+                        Log.e(TAG, "scanRecord.getBytes() : "+scanRecord.getBytes());
+                        //;
+                    }
 
+                }
             }
         });
+/**
+        beaconManager.addRangeNotifier(this);
+        Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getBackgroundBetweenScanPeriod());
+        Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getRangingNotifiers().toArray());
+*/
+
+
 
         //Button Get and Show Data
         button_getData.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +257,8 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                     op_find.setText("");
                 }
             });
+
+            //beaconManager.bind(this);
     }
 
 
@@ -384,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         mBuilder.build();
     }
 
+
 /**
     private String getScanResult(){
 
@@ -398,6 +446,12 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     }
 */
 
+    protected ScanCallback scanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+        }
+    };
 
 
 //Beacon Service Connect
@@ -408,18 +462,24 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         Identifier myBeaconNamespaceId = Identifier.parse("0x2f234454f4911ba9ffa6");
         Identifier myBeaconInstanceId = Identifier.parse("0x000000000001");
 
-        Region region = new Region("my-beacon-region", myBeaconNamespaceId, myBeaconInstanceId, null);
+        //Region region = new Region("my-beacon-region", myBeaconNamespaceId, myBeaconInstanceId, null);
+        Region region = new Region("my-beacon-region"
+                , Identifier.parse("0x2f234454f4911ba9ffa6")
+                , Identifier.parse("0x000000000001")
+                , null);
+/**
 
         beaconManager.addMonitorNotifier(this);
         try {
             //beaconManager.startMonitoringBeaconsInRegion(region);
             beaconManager.startRangingBeaconsInRegion(region);
+            //beaconManager.addRangeNotifier(rangeNotifier);
             //beaconManager.addRangeNotifier(this);
             //Log.e(TAG,"beaconManager: "+scanResult.getDevice().getName());
             //beaconManager.
 
         } catch (RemoteException e) {e.printStackTrace();}
-
+*/
 
 
     }
