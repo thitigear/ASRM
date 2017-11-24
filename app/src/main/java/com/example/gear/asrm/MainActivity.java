@@ -3,6 +3,8 @@ package com.example.gear.asrm;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothAdapter.LeScanCallback;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
@@ -88,13 +90,14 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     Collection<Beacon> beaconsCol;
     BeaconService beaconService;
     RangeNotifier rangeNotifier = null;
+    BluetoothGatt bluetoothGatt;
 
 
     Callback callback;
 
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-    BluetoothLeAdvertiser bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
+    //BluetoothLeAdvertiser bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
 
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static final String TAG = "MainActivity";
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
     protected double angleL;
     protected double angleR;
     int count = 0;
-    protected List beaconList;
+    protected List deviceList;
 
     /**myUUID : 74278bda-b644-4520-8f0c-720eaf059935 */
 
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         //Get Default Value
         body = core.getDefaultBody();
         setTextTextView(body);
-
+/**
         final Beacon beacon1 = new Beacon.Builder()
                 .setId1("74278bda-b644-4520-8f0c-720eaf059935")
                 .setId2("1")
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                 .setDataFields(Arrays.asList(new Long[] {0l}))
                 .setBluetoothAddress("50:8C:B1:75:1C:3C")
                 .build();
-
+*/
         BeaconParser beaconParser = new BeaconParser()
                 .setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT);
 
@@ -181,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
 
 
         //Log.e(TAG, "*******************BEACON Distance :"+data);//[B@21bccd0f
-
+        /**
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
@@ -205,13 +208,42 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                 }
             }
         });
+         */
+
+        // Prepare the callback for BLE device scan
+        LeScanCallback leScanCallback = null;
+
+        /**
+            leScanCallback = new BluetoothAdapter.LeScanCallback() {
+            @Override
+            public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+
+                if (!deviceList.contains(device)) {
+
+                    deviceList.add(device);
+                    Log.e("Test", "Device: " + device.getName());
+
+                    List<AdRecord> adRecords = AdRecord.parseScanRecord(scanRecord);
+
+                    for (AdRecord adRecord : adRecords) {
+
+                        if (adRecord.getType() == AdRecord.TYPE_TRANSMITPOWER) {
+
+                            Log.e("Test", "size of payload: " + adRecord.getData().length);
+                            Log.e("Test", "payload: " + Byte.toString(adRecord.getData()[0]));
+                        }
+                    }
+                }
+            }
+        };
+        */
+
+
 /**
         beaconManager.addRangeNotifier(this);
         Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getBackgroundBetweenScanPeriod());
         Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getRangingNotifiers().toArray());
 */
-
-
 
         //Button Get and Show Data
         button_getData.setOnClickListener(new View.OnClickListener() {
@@ -554,5 +586,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         super.onPause();
         beaconManager.unbind(this);
     }
+
+
 
 }
