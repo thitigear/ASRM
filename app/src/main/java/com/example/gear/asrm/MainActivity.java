@@ -1,115 +1,42 @@
 package com.example.gear.asrm;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothAdapter.LeScanCallback;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.AdvertiseCallback;
-import android.bluetooth.le.AdvertiseData;
-import android.bluetooth.le.AdvertiseSettings;
-import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconData;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.BeaconTransmitter;
-import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.MonitorNotifier;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
-import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
-import org.altbeacon.beacon.service.BeaconService;
-import org.altbeacon.beacon.service.Callback;
-import org.altbeacon.beacon.service.ScanJob;
-import org.altbeacon.beacon.simulator.BeaconSimulator;
-import org.altbeacon.beacon.startup.BootstrapNotifier;
-import org.altbeacon.beacon.startup.RegionBootstrap;
-import org.altbeacon.beacon.startup.StartupBroadcastReceiver;
-import org.altbeacon.bluetooth.BleAdvertisement;
-import org.altbeacon.bluetooth.Pdu;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements BootstrapNotifier, MonitorNotifier, RangeNotifier, BeaconConsumer {
-
-    private BeaconManager beaconManager;
-    private RegionBootstrap regionBootstrap;
-    private BackgroundPowerSaver backgroundPowerSaver;
-    //private Region region = new Region("All Beacon Region", null, null, null);
-    private MonitoringActivity monitoringActivity;
-    Identifier identifier;
-    private Region region = new Region("my-beacon-region"
-            , Identifier.parse("0x2f234454f4911ba9ffa6")
-            , Identifier.parse("0x000000000001")
-            , null);
+public class MainActivity extends AppCompatActivity{
 
     ScanResult scanResult;
     ScanRecord scanRecord;
-    ScanJob scanJob;
-
-    BeaconSimulator beaconSimulator;
-
-    StartupBroadcastReceiver startupBroadcastReceiver;
-    BeaconConsumer beaconConsumer;
-    BeaconTransmitter beaconTransmitter;
-    Collection<Beacon> beaconsCol;
-    BeaconService beaconService;
-    RangeNotifier rangeNotifier = null;
-    BluetoothGatt bluetoothGatt;
-
-
-    Callback callback;
 
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-    //BluetoothLeAdvertiser bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
 
-    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static final String TAG = "MainActivity";
 
     CoreF core = new CoreF();
-    protected Double[] body = new Double[]{0.0,0.0,0.0,0.0, 0.0,0.0,0.0,0.0};
-    protected double angleL;
-    protected double angleR;
-    int count = 0;
-    protected List deviceList;
+    protected Map<String, int[]> deviceList = new HashMap<String, int[]>();
 
-    /**myUUID : 74278bda-b644-4520-8f0c-720eaf059935 */
+    /*
+       * HMSoft = D4:36:39:DE:56:C6       // knee
+       * HMSoft = D4:36:39:DE:57:D0       // ankle
+       * HMSensor = 50:8C:B1:75:1C:3C     // shin
+       * HMSensor = 50:8C:B1:75:16:D2]    // arm
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,72 +46,88 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
 
         final TextView op_find = (TextView) findViewById(R.id.output_found);
 
-        beaconManager = BeaconManager.getInstanceForApplication(this);
-
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
-
-        //rangeNotifier.didRangeBeaconsInRegion(beaconsCol, region);
-/**
-    //// Detect the main Beacon frame:
-        if (checkPrerequisites()) {
-            beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT));
-            beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
-            beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
-            beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
-            beaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));}
-            // Transmit a beacon with Identifiers 74278bda-b644-4520-8f0c-720eaf059935 66504 66505
-
-            //beacon.setExtraDataFields(new Beacon.Builder().set);
- */
-        beaconManager.bind(this);
-
-        //beaconList = beaconSimulator.getBeacons();
-        //Log.e(TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$beaconList : "+beaconList);
-
+/* UI Binding */
         //Define Button
-        Button button_getData = (Button) findViewById(R.id.button_getData);
+        Button button_showData = (Button) findViewById(R.id.button_getData);
         Button button_findAngel = (Button) findViewById(R.id.button_findAngle);
 
-        //Get Default Value
-        body = core.getDefaultBody();
-        setTextTextView(body);
-/**
-        final Beacon beacon1 = new Beacon.Builder()
-                .setId1("74278bda-b644-4520-8f0c-720eaf059935")
-                .setId2("1")
-                .setId3("2")
-                .setManufacturer(76)
-                .setTxPower(-59)
-                .setDataFields(Arrays.asList(new Long[] {0l}))
-                .setBluetoothAddress("14:E3:C5:FD:C3:49")
-                .build();
 
-        final Beacon beacon2 = new Beacon.Builder()
-                .setId1("74278bda-b644-4520-8f0c-720eaf059935")
-                .setId2("1")
-                .setId3("3")
-                .setManufacturer(76)
-                .setTxPower(-59)
-                .setDataFields(Arrays.asList(new Long[] {0l}))
-                .setBluetoothAddress("50:8C:B1:75:1C:3C")
-                .build();
+        /* DeviceList Structure
+         * --------------------------------------------------------------------------------
+         * data = Key: capsuleRssiTxPower
+         * capsuleRssiTxPower = {Rssi, TxPowerLevel};
+         * ////////////////////////////////////////////////////////////////////////////////
+         * Device Address
+         * --------------------------------------------------------------------------------
+         * HMSoft = D4:36:39:DE:56:C6       // knee
+         * HMSoft = D4:36:39:DE:57:D0       // ankle
+         * HMSensor = 50:8C:B1:75:1C:3C     // shin
+         * HMSensor = 50:8C:B1:75:16:D2    // arm
+         * ////////////////////////////////////////////////////////////////////////////////
+         * Cal Distance
+         * core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel()))
+         */
+
+/* Button Coding */
+        //Button Get and Show Data
+        button_showData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "///////////////////////Show Data/////////////////////////////////");
+                /* ////////////////////////////////////////////////////////////////////////////////
+                * Find Distance
+                * --------------------------------------------------------------------------------
+                * core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel())
+                * ////////////////////////////////////////////////////////////////////////////////
+                */
+
+        /* Get Body */
+                double arm = core.calculateDistance(deviceList.get("50:8C:B1:75:16:D2")[0], deviceList.get("50:8C:B1:75:16:D2")[1]);
+                Log.e(TAG, "///////////////////////Arm :" + arm);
+                double knee = core.calculateDistance(deviceList.get("D4:36:39:DE:56:C6")[0], deviceList.get("D4:36:39:DE:56:C6")[1]);
+                Log.e(TAG, "///////////////////////Knee :" + knee);
+                double ankle = core.calculateDistance(deviceList.get("D4:36:39:DE:57:D0")[0], deviceList.get("D4:36:39:DE:57:D0")[1]);
+                Log.e(TAG, "///////////////////////Ankle :" + ankle);
+                double shin = 40.0;
+                setTextTextViewLeft(core.getBodyHalf(
+                        core.calculateDistance(deviceList.get("50:8C:B1:75:16:D2")[0], deviceList.get("50:8C:B1:75:16:D2")[1])
+                        , core.calculateDistance(deviceList.get("D4:36:39:DE:56:C6")[0], deviceList.get("D4:36:39:DE:56:C6")[1])
+                        , core.calculateDistance(deviceList.get("D4:36:39:DE:57:D0")[0], deviceList.get("D4:36:39:DE:57:D0")[1])
+                        , shin
+                ));
+/*
+                if (count == 0) {
+                    body = core.getBody1();
+                    setTextTextView(body);
+                    count++;
+                } else if (count == 1) {
+                    body = core.getBody2();
+                    setTextTextView(body);
+                    count++;
+                } else if (count == 2) {
+                    body = core.getBody3();
+                    setTextTextView(body);
+                    count++;
+                } else {
+                    body = core.getDefaultBody();
+                    setTextTextView(body);
+                    count = 0;
+                }
 */
-        BeaconParser beaconParser = new BeaconParser()
-                .setBeaconLayout(BeaconParser.URI_BEACON_LAYOUT);
+                //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
+            }
+        });
+        //Show/Find Beacon
+        button_findAngel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        //beaconsCol.add(beacon1);
-        //beaconsCol.add(beacon2);
-
-        //byte[] data = beaconParser.getBeaconAdvertisementData(beacon1);
-
+                op_find.setText("");
+            }
+        });
 
 
-        //Log.e(TAG, "*******************BEACON Distance :"+data);//[B@21bccd0f
-        /**
+/* Bluetooth Scan to Find Beacon */
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
@@ -192,367 +135,69 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
                 scanResult = result;
                 scanRecord = result.getScanRecord();
 
-                if(scanRecord.getManufacturerSpecificData() != null){
-                    if (scanRecord.getTxPowerLevel() > -100){
-                        Log.e(TAG, "Scan ManufacturerSpecificData: " + scanRecord.getManufacturerSpecificData());
-                        Log.e(TAG, "scanRecord.getServiceUuids : "+scanRecord.getServiceUuids());
-                        Log.e(TAG, "scanResult.getDevice().getAddress(): "+scanResult.getDevice().getAddress());
-                        Log.e(TAG, "scanResult.getDevice().getAddress(): "+scanResult.getDevice().getName());
-                        Log.e(TAG, "scanRecord.getTxPowerLevel : "+scanRecord.getTxPowerLevel());
-                        Log.e(TAG, "scanResult.getRssi : "+scanResult.getRssi());
-                        //Log.e(TAG, "scanResult. Distance : "+calculateAccuracy(scanRecord.getBytes(), scanResult.getRssi()));
-                        Log.e(TAG, "scanRecord.getBytes() : "+scanRecord.getBytes());
-                        //;
-                    }
-
-                }
-            }
-        });
-         */
-
-        // Prepare the callback for BLE device scan
-        LeScanCallback leScanCallback = null;
-
-        /**
-            leScanCallback = new BluetoothAdapter.LeScanCallback() {
-            @Override
-            public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-
-                if (!deviceList.contains(device)) {
-
-                    deviceList.add(device);
-                    Log.e("Test", "Device: " + device.getName());
-
-                    List<AdRecord> adRecords = AdRecord.parseScanRecord(scanRecord);
-
-                    for (AdRecord adRecord : adRecords) {
-
-                        if (adRecord.getType() == AdRecord.TYPE_TRANSMITPOWER) {
-
-                            Log.e("Test", "size of payload: " + adRecord.getData().length);
-                            Log.e("Test", "payload: " + Byte.toString(adRecord.getData()[0]));
-                        }
-                    }
-                }
-            }
-        };
-        */
-
-
+                if (scanResult.getDevice().getName() != null) {
+                    int[] capsuleRssiTxPower = {scanResult.getRssi(), scanRecord.getTxPowerLevel()};
 /**
-        beaconManager.addRangeNotifier(this);
-        Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getBackgroundBetweenScanPeriod());
-        Log.e(TAG, "beaconManager.getBackgroundBetweenScanPeriod : "+beaconManager.getRangingNotifiers().toArray());
+                    Log.e(TAG, "******************* Device Key : " +
+                            deviceList.keySet());
+                    Log.e(TAG, "******************* Device : " +
+                            scanResult.getDevice().getAddress());
+                    Log.e(TAG, "************** Distance :" +
+                            core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel()));
 */
+                    if (deviceList.containsKey(scanResult.getDevice().getAddress())) {
+                        /* Update Device Rssi & TxPowerLevel */
+                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
 
-        //Button Get and Show Data
-        button_getData.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e(TAG, "Click get data button");
-                    if (count == 0) {
-                        body = core.getBody1();
-                        setTextTextView(body);
-                        count++;
-                    } else if (count == 1) {
-                        body = core.getBody2();
-                        setTextTextView(body);
-                        count++;
-                    } else if (count == 2) {
-                        body = core.getBody3();
-                        setTextTextView(body);
-                        count++;
                     } else {
-                        body = core.getDefaultBody();
-                        setTextTextView(body);
-                        count = 0;
+                        /* Add Device to DeviceList */
+                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
                     }
-                    //Find All Device near us
-
-                    onResume();
-                    //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
                 }
+            }
         });
-            //Show/Find Beacon
-            button_findAngel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e(TAG, "Click Find Button");
-                    Log.d(TAG, "isAnyConsumerBound:" + beaconManager.isAnyConsumerBound());
-                    Log.d(TAG, "isRegionStatePersistenceEnabled:" + beaconManager.isRegionStatePersistenceEnabled());
-                    Log.d(TAG, "beaconManager.isRegionStatePersistenceEnabled: " + beaconManager.isRegionStatePersistenceEnabled());
-                    //regionBootstrap.disable();
-//              startupBroadcastReceiver.onReceive(MainActivity.this, monitoringActivity.getIntent());
-
-                    //Log.e(TAG,"mScanCallback.toString: "+ scanResult.getScanRecord().getDeviceName());
-                    onPause();
-                    op_find.setText("");
-                }
-            });
-
-            //beaconManager.bind(this);
     }
 
 
-
-    @TargetApi(21)
-    private boolean checkPrerequisites(){
-        if (android.os.Build.VERSION.SDK_INT < 18) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Bluetooth LE not supported by this device's operating system");
-            builder.setMessage("You will not be able to transmit as a Beacon");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    finish();
-                }
-
-            });
-            builder.show();
-            return false;
-        }
-        if (!getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Bluetooth LE not supported by this device");
-            builder.setMessage("You will not be able to transmit as a Beacon");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    finish();
-                }
-
-            });
-            builder.show();
-            return false;
-        }
-        if (!((BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().isEnabled()){
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Bluetooth not enabled");
-            builder.setMessage("Please enable Bluetooth and restart this app.");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    finish();
-                }
-
-            });
-            builder.show();
-            return false;
-
-        }
-
-        try {
-            // Check to see if the getBluetoothLeAdvertiser is available.  If not, this will throw an exception indicating we are not running Android L
-            ((BluetoothManager) this.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().getBluetoothLeAdvertiser();
-        }
-        catch (Exception e) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Bluetooth LE advertising unavailable");
-            builder.setMessage("Sorry, the operating system on this device does not support Bluetooth LE advertising.  As of July 2014, only the Android L preview OS supports this feature in user-installed apps.");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    finish();
-                }
-
-            });
-            builder.show();
-            return false;
-
-        }
-
-        return true;
-
-    }
-
-    @NonNull
-    public static byte[] uuidToByte(UUID uuid){
-        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
-        bb.putLong(uuid.getMostSignificantBits());
-        bb.putLong(uuid.getLeastSignificantBits());
-        return bb.array();
-    }
-
-    private void setTextTextView(Double[] body) {
+    /* Set TextView */
+    private void setTextTextViewLeft(Double[] body) {
         final TextView op_armL = (TextView) findViewById(R.id.output_armL);
         final TextView op_kneeL = (TextView) findViewById(R.id.output_kneeL);
         final TextView op_ankleL = (TextView) findViewById(R.id.output_ankleL);
         final TextView op_shinL = (TextView) findViewById(R.id.output_shinL);
+        final TextView op_angleL = (TextView) findViewById(R.id.output_angleL);
+
+        double angleL = core.findAngle(body[1], body[2], body[3]);
+
+        op_armL.setText(core.getTextDouble(body[0]));
+        op_kneeL.setText(core.getTextDouble(body[1]));
+        op_ankleL.setText(core.getTextDouble(body[2]));
+        op_shinL.setText(core.getTextDouble(body[3]));
+        op_angleL.setText(core.getTextDouble(angleL));
+    }
+    private void setTextTextViewRight(Double[] body) {
         final TextView op_armR = (TextView) findViewById(R.id.output_armR);
         final TextView op_kneeR = (TextView) findViewById(R.id.output_kneeR);
         final TextView op_ankleR = (TextView) findViewById(R.id.output_ankleR);
         final TextView op_shinR = (TextView) findViewById(R.id.output_shinR);
-
-        final TextView op_angleL = (TextView) findViewById(R.id.output_angleL);
         final TextView op_angleR = (TextView) findViewById(R.id.output_angleR);
 
-        op_armL.setText(core.getTextDouble(body[0]));
-        op_armR.setText(core.getTextDouble(body[1]));
-        op_kneeL.setText(core.getTextDouble(body[2]));
-        op_kneeR.setText(core.getTextDouble(body[3]));
-        op_ankleL.setText(core.getTextDouble(body[4]));
-        op_ankleR.setText(core.getTextDouble(body[5]));
-        op_shinL.setText(core.getTextDouble(body[6]));
-        op_shinR.setText(core.getTextDouble(body[7]));
-        angleL = core.findAngle(body[4], body[2], body[6]);
-        angleR = core.findAngle(body[5], body[3], body[7]);
-        op_angleL.setText(core.getTextDouble(angleL));
+        double angleR = core.findAngle(body[1], body[2], body[3]);
+
+        op_armR.setText(core.getTextDouble(body[0]));
+        op_kneeR.setText(core.getTextDouble(body[1]));
+        op_ankleR.setText(core.getTextDouble(body[2]));
+        op_shinR.setText(core.getTextDouble(body[3]));
         op_angleR.setText(core.getTextDouble(angleR));
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_COARSE_LOCATION: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "coarse location permission granted");
-                } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Functionality limited");
-                    builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
-
-                    });
-                    builder.show();
-                }
-                return;
-            }
-        }
-    }
-
-    private void setScanFilter(){
-        Log.e(TAG, "SetScanFilter !!!!!!!!!!!");
-        ScanFilter.Builder mBuilder = new ScanFilter.Builder();
-        ByteBuffer mManufacturerData = ByteBuffer.allocate(23);
-        ByteBuffer mManufacturerDataMask = ByteBuffer.allocate(24);
-
-
-        UUID uuid = UUID.fromString(bluetoothAdapter.getAddress());
-        byte[] uuidByte = uuidToByte(uuid);
-
-        mManufacturerData.put(0, (byte)0xBE);
-        mManufacturerData.put (1, (byte)0xAC);
-        for (int i=2; i<=17; i++) {
-            mManufacturerData.put(i, uuidByte[i-2]);
-        }
-        for (int i=0; i<=17; i++) {
-            mManufacturerDataMask.put((byte)0x01);
-        }
-        mBuilder.setManufacturerData(224, mManufacturerData.array(), mManufacturerDataMask.array());
-        mBuilder.build();
-    }
-
-    private void setScanSettings() {
-        Log.e(TAG, "SetScanSetting !!!!!!");
-        ScanSettings.Builder mBuilder = new ScanSettings.Builder();
-        mBuilder.setReportDelay(0);
-        mBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-        mBuilder.build();
-    }
-
-
-/**
-    private String getScanResult(){
-
-        ScanCallback scanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType, result);
-            }
-        };
-
-        return scanCallback;
-    }
-*/
-
-    protected ScanCallback scanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-        }
-    };
-
-
-//Beacon Service Connect
-    @Override
-    public void onBeaconServiceConnect() {
-        Log.e(TAG+"!!!!", "Start Service!!!!!!!!!!!!!!!!!!!");
-
-        Identifier myBeaconNamespaceId = Identifier.parse("0x2f234454f4911ba9ffa6");
-        Identifier myBeaconInstanceId = Identifier.parse("0x000000000001");
-
-        //Region region = new Region("my-beacon-region", myBeaconNamespaceId, myBeaconInstanceId, null);
-        Region region = new Region("my-beacon-region"
-                , Identifier.parse("0x2f234454f4911ba9ffa6")
-                , Identifier.parse("0x000000000001")
-                , null);
-/**
-
-        beaconManager.addMonitorNotifier(this);
-        try {
-            //beaconManager.startMonitoringBeaconsInRegion(region);
-            beaconManager.startRangingBeaconsInRegion(region);
-            //beaconManager.addRangeNotifier(rangeNotifier);
-            //beaconManager.addRangeNotifier(this);
-            //Log.e(TAG,"beaconManager: "+scanResult.getDevice().getName());
-            //beaconManager.
-
-        } catch (RemoteException e) {e.printStackTrace();}
-*/
-
-
-    }
-
-//RegionNotifier
-    @Override
-    public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-
-
-        for (Beacon beacon: beacons) {
-            if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x00) {
-                // This is a  frame
-                beaconsCol.add(beacon); Log.e(TAG, "Add Beacon to Beacon Collection");
-                Identifier namespaceId = beacon.getId1();
-                Identifier instanceId = beacon.getId2();
-                Log.d(TAG, "I see a beacon transmitting namespace id: " + namespaceId +
-                        " and instance id: " + instanceId +
-                        " approximately " + beacon.getDistance() + " meters away.");
-                if (beacon.getExtraDataFields().size() > 0) {
-                    long telemetryVersion = beacon.getExtraDataFields().get(0);
-                    long batteryMilliVolts = beacon.getExtraDataFields().get(1);
-                    long pduCount = beacon.getExtraDataFields().get(3);
-                    long uptime = beacon.getExtraDataFields().get(4);
-
-                    Log.d(TAG, "The above beacon is sending telemetry version "+telemetryVersion+
-                            ", has been up for : "+uptime+" seconds"+
-                            ", has a battery level of "+batteryMilliVolts+" mV"+
-                            ", and has transmitted "+pduCount+" advertisements.");
-
-                }
-            }
-        }
-    }
-
-//Creat OPTION MENU
+    /* Creat OPTION MENU */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_beacon, menu);
         return true;
     }
-//Select MENU ITEM
+    /* Select MENU ITEM */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -562,30 +207,7 @@ public class MainActivity extends AppCompatActivity implements BootstrapNotifier
         return super.onOptionsItemSelected(item);
     }
 
-//Beacon REGION
-    @Override
-    public void didEnterRegion(Region region) {
-        Log.e(TAG, "Got a didEnterRegion call");
-        // This call to disable will make it so the activity below only gets launched the first time a beacon is seen (until the next time the app is launched)
-        // if you want the Activity to launch every single time beacons come into view, remove this call.
-        //regionBootstrap.disable();
-        Log.d(TAG, "I detected a beacon in the region with namespace id " + region.getId1() +
-                " and instance id: " + region.getId2());
-    }
-    @Override
-    public void didExitRegion(Region region) {
-        //Don't Care
-    }
-    @Override
-    public void didDetermineStateForRegion(int state, Region region) {
-        //Don't Care
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        beaconManager.unbind(this);
-    }
 
 
 
