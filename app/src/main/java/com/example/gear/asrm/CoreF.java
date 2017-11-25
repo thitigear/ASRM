@@ -5,16 +5,14 @@ package com.example.gear.asrm;
  */
 
 class CoreF {
-    Double bodyHalf[] = new Double[4];
-    // {armL, kneeL, ankleL, shinL constant}
+    // Double[] bodyHalf = {armL, kneeL, ankleL, shinL constant}
 
     public CoreF() {
     }
 
     //ขาตรง 180 องศา            วัดได้ 180
     Double[] getBodyHalf(double arm, double knee, double ankle, double shin){
-        bodyHalf = new Double[]{arm, knee, ankle, shin};
-        return bodyHalf;
+        return new Double[]{arm, knee, ankle, shin};
     }
 /**
     //งอขา ประมาณ 120 องศา     วัดได้ 140

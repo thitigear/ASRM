@@ -133,18 +133,17 @@ public class MainActivity extends AppCompatActivity{
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
                 scanResult = result;
-                scanRecord = result.getScanRecord();
 
                 if (scanResult.getDevice().getName() != null) {
                     int[] capsuleRssiTxPower = {scanResult.getRssi(), scanRecord.getTxPowerLevel()};
-/**
-                    Log.e(TAG, "******************* Device Key : " +
+
+/*                  Log.e(TAG, "******************* Device Key : " +
                             deviceList.keySet());
                     Log.e(TAG, "******************* Device : " +
                             scanResult.getDevice().getAddress());
                     Log.e(TAG, "************** Distance :" +
-                            core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel()));
-*/
+                            core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel())); */
+
                     if (deviceList.containsKey(scanResult.getDevice().getAddress())) {
                         /* Update Device Rssi & TxPowerLevel */
                         deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
