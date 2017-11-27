@@ -11,6 +11,6 @@
     <string name="tAngleL">L KneeAngle</string>
     <string name="tAngleR">R KneeAngle</string>
     <string name="tAllSensor"><font size="16"><b>All Sensor</b></font></string>
-    <string name="button_getData">Change Motion</string>
+    <string name="button_getData">Show Distance</string>
     <string name="button_findAngle">Find Angle</string>
 </resources>
