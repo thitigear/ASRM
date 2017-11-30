@@ -220,13 +220,15 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /* Creat OPTION MENU */
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_beacon, menu);
         return true;
-    }
+    }*/
 
     /* Select MENU ITEM */
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -235,7 +237,7 @@ public class MainActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
 
 
 

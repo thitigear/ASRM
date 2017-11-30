@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">Run</string>
+
+    <!-- Popular Word -->
+    <string name="ok">OK</string>
+
+    <!-- MainActivity -->
+    <string name="app_name">Run!</string>
     <string name="tArmL">L Arm</string>
     <string name="tArmR">R Arm</string>
     <string name="tKneeL">L Knee</string>
@@ -13,4 +18,17 @@
     <string name="tAllSensor"><font size="16"><b>All Sensor</b></font></string>
     <string name="button_getData">Show Distance</string>
     <string name="button_findAngle">Find Angle</string>
+    
+    <!-- Menu -->
+    <string name="menu_home">HOME</string>
+    <string name="menu_allBeacon">All Beacons</string>
+    <string name="menu_newRound">New Round</string>
+    <string name="menu_history">History</string>
+
+    <!-- ResultActivity -->
+    <string name="tResult_RoundSummary">Round Summary</string>
+    <string name="tResult_LeftPercent">Left :</string>
+    <string name="tResult_RightPercent">Right :</string>
+    <string name="tResult_AngleSim">Angle Simulation</string>
+    <string name="tResult_Status">Status</string>
 </resources>

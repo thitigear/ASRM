@@ -14,6 +14,7 @@ class CoreF {
     Double[] getBodyHalf(double arm, double knee, double ankle, double shin){
         return new Double[]{arm, knee, ankle, shin};
     }
+
 /**
     //งอขา ประมาณ 120 องศา     วัดได้ 140
     Double[] getBody1(){
@@ -34,6 +35,7 @@ class CoreF {
     }
 
 */
+
     double findAngle(Double fKnee, Double fAnkle, Double fShin){
         //power(3, 2) == 9
         double s = (Math.pow(fKnee,2)+Math.pow(fShin,2)-Math.pow(fAnkle,2))/(2*fKnee*fShin);
