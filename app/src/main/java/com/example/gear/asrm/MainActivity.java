@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
          */
 
 /* Button Coding */
-        //Button Get and Show Data
+/**        //Button Get and Show Data
         button_showData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity{
         /* Get Body */
                 //double arm = core.calculateDistance(deviceList.get("50:8C:B1:75:16:D2")[0], deviceList.get("50:8C:B1:75:16:D2")[1]);
                 //Log.e(TAG, "///////////////////////Arm :" + arm);
-                double knee = core.calculateDistance(deviceList.get("50:8C:B1:75:1C:3C")[0], deviceList.get("50:8C:B1:75:1C:3C")[1]);
+/**                double knee = core.calculateDistance(deviceList.get("50:8C:B1:75:1C:3C")[0], deviceList.get("50:8C:B1:75:1C:3C")[1]);
                 Log.e(TAG, "///////////////////////Knee :" + knee);
                 double ankle = core.calculateDistance(deviceList.get("D4:36:39:DE:57:D0")[0], (deviceList.get("D4:36:39:DE:57:D0")[1]) - 20);
                 Log.e(TAG, "///////////////////////Ankle :" + ankle);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity{
                 }
 */
                 //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
-            }
+/**           }
         });
         //Show/Find Beacon
         button_findAngel.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 /* Bluetooth Scan to Find Beacon */
-        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
+/**        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
         scanSettingsBuilder.setReportDelay(0);
 
         bluetoothLeScanner.startScan(new ScanCallback() {
@@ -151,11 +151,11 @@ public class MainActivity extends AppCompatActivity{
                             deviceList.keySet());
                     if (deviceList.containsKey(scanResult.getDevice().getAddress())) {
                         /* Update Device Rssi & TxPowerLevel */
-                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
+/**                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
 
                     } else {
                         /* Add Device to DeviceList */
-                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
+/**                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
                     }
 /*
                     if (deviceList.size() >= 3) {
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity{
 
                     }
 */
-                }
+/**                }
             }
         });
 

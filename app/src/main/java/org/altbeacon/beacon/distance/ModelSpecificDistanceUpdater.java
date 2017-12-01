@@ -8,6 +8,8 @@ import android.provider.Settings;
 import android.util.Log;
 
 
+import com.example.gear.asrm.BuildConfig;
+
 import org.altbeacon.beacon.*;
 import org.json.JSONObject;
 

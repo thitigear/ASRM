@@ -17,7 +17,7 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-
+/**
         mPlanetTitles = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.result_navigationMenu);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -28,7 +28,7 @@ public class ResultActivity extends AppCompatActivity {
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-
+*/
 
     }
 }

@@ -44,6 +44,13 @@
             android:text="@string/tResult_LeftPercent"
             android:textSize="20dp"
             android:textColor="#00c4db" />
+                <TextView
+                    android:id="@+id/result_textView_LeftPercent"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="67dp"
+                    android:layout_marginLeft="150dp"
+                    android:background="#dfdfdf"/>
         <TextView
             android:text="@string/tResult_RightPercent"
             android:layout_alignStart="@+id/textView"
@@ -53,6 +60,13 @@
             android:layout_height="25dp"
             android:textSize="20dp"
             android:textColor="#00c4db"/>
+                <TextView
+                    android:id="@+id/result_textView_RightPercent"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="107dp"
+                    android:layout_marginLeft="150dp"
+                    android:background="#dfdfdf"/>
 
 <!-- Angle Simulation -->
         <TextView
@@ -76,6 +90,8 @@
             android:textAlignment="center"
             android:textColor="#69c7d2"/>
 
+
+
 <!-- Status -->
         <TextView
             android:text="@string/tResult_Status"
@@ -97,7 +113,7 @@
             android:textScaleX="30"
             android:textAlignment="center"
             android:textColor="#69c7d2"/>
-        <TextView
+                <TextView
             android:id="@+id/result_textView_showStatus"
             android:text="GOOD!"
             android:layout_marginLeft="89dp"
@@ -119,7 +135,7 @@
             android:textScaleX="30"
             android:textAlignment="center"
             android:textColor="#69c7d2"/>
-        <Button
+                <Button
             android:id="@+id/result_button_OK"
             android:layout_marginTop="430dp"
             android:layout_marginLeft="134dp"
