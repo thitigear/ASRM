@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,19 +30,19 @@ public class MainActivity extends AppCompatActivity{
     ScanResult scanResult;
     ScanRecord scanRecord;
 
+    /**
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-
+*/
     private static final String TAG = "MainActivity";
-
     CoreF core = new CoreF();
     protected Map<String, int[]> deviceList = new HashMap<String, int[]>();
 
     /*
-       * HMSoft = D4:36:39:DE:56:C6       // knee
+       * HMSoft = D4:36:39:DE:56:C6       //
        * HMSoft = D4:36:39:DE:57:D0       // ankle
        * HMSensor = 50:8C:B1:75:1C:3C     // shin
-       * HMSensor = 50:8C:B1:75:16:D2]    // arm
+       * HMSensor = 50:8C:B1:75:16:D2]    // knee
     */
 
     @Override
@@ -49,9 +51,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         Log.e(TAG, "APP STARTED UP NOW!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        final TextView op_find = (TextView) findViewById(R.id.output_found);
-        final TextView op_kneeL = (TextView) findViewById(R.id.output_kneeL);
-        final TextView op_ankleL = (TextView) findViewById(R.id.output_ankleL);
 
 /* UI Binding */
         //Define Button
@@ -118,15 +117,22 @@ public class MainActivity extends AppCompatActivity{
                     setTextTextView(body);
                     count = 0;
                 }
-*/
+
                 //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
-/**           }
+          }
         });
+ */
+
         //Show/Find Beacon
         button_findAngel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                // IMPORTANT: in the AndroidManifest.xml definition of this activity, you must set android:launchMode="singleInstance" or you will get two instances
+                // created when a user launches the activity manually and it gets launched from here.
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
             }
         });
