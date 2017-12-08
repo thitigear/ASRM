@@ -8,6 +8,9 @@ import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +28,7 @@ import java.util.Scanner;
 import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ScanResult scanResult;
     ScanRecord scanRecord;
@@ -190,7 +193,6 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
     /* Set TextView */
     private void setTextTextViewLeft(Double[] body) {
         final TextView op_armL = (TextView) findViewById(R.id.output_armL);
@@ -225,6 +227,22 @@ public class MainActivity extends AppCompatActivity{
         op_angleR.setText(core.getTextDouble(angleR));
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        FragmentManager fragmentManager = getFragmentManager();
+
+        if (id == R.id.nav_home){
+
+        } else if (id == R.id.nav_newRound){
+
+        } else if (id == R.id.nav_allBeacon){
+
+        } else if (id == R.id.nav_history){
+
+        }
+    }
+
     /* Creat OPTION MENU */
     /*
     @Override
@@ -244,6 +262,7 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 */
+
 
 
 
