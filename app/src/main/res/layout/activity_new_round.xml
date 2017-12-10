@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gear.asrm.NewRoundActivity">
+    tools:context="com.example.gear.asrm.activity.NewRoundActivity">
 
     <RelativeLayout
         android:layout_width="370dp"
@@ -13,12 +13,11 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_marginTop="100dp">
 
-        <ImageButton
-            android:id="@+id/newRound_button_add"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="290dp"
-            android:layout_marginTop="425dp"/>
-
+        <TextView
+            android:id="@+id/newRound_textView_Header"
+            android:text="@string/menu_newRound"
+            style="@style/textView_header24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

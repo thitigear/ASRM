@@ -1,3 +1,4 @@
+
 package com.example.gear.asrm;
 
 import android.Manifest;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+/*
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Region;
@@ -20,17 +22,18 @@ import org.altbeacon.beacon.startup.RegionBootstrap;
  * Created by Gear on 11/20/2017.
  */
 
-public class MyApplicationName extends Application implements BootstrapNotifier {
+public class MyApplicationName extends Application {
+        //implements BootstrapNotifier {
 
     private static final String TAG = ".MyApplicationName";
-    private RegionBootstrap regionBootstrap;
-    private Region region = new Region("com.example.gear.asrm.boostrapRegion", null, null, null);
+    //private RegionBootstrap regionBootstrap;
+    //private Region region = new Region("com.example.gear.asrm.boostrapRegion", null, null, null);
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.e(TAG, "APP STARTED UP NOW!!!!!!!!!!!!!!!!!!!!!!!!!");
-
+/*
         BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
         // To detect proprietary beacons, you must add a line like below corresponding to your beacon
         // type.  Do a web search for "setBeaconLayout" to get the proper expression.
@@ -62,5 +65,7 @@ public class MyApplicationName extends Application implements BootstrapNotifier 
     @Override
     public void didDetermineStateForRegion(int state, Region region) {
         //Don't Care
+    }
+    */
     }
 }

@@ -17,7 +17,7 @@ public class historyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.activity_new_round, container, false);
+        View myView = inflater.inflate(R.layout.activity_history, container, false);
         return myView;
     }
 }

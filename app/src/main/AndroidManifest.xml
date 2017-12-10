@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gear.asrm">
 
-    <uses-sdk android:minSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="21" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -17,34 +17,77 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <!-- Note:  the singleInstance below is important to keep two copies of your activity from getting launched on automatic startup -->
+
+
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.GET_CONTENT" />
             </intent-filter>
         </activity>
-    <!-- Result Activity -->
-        <activity
-            android:name=".ResultActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.GET_CONTENT"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-    <!-- New Round Activity -->
-        <activity
-            android:name=".NewRoundActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.GET_CONTENT"/>
 
+        <!-- New Round Activity -->
+        <activity
+            android:name=".activity.NewRoundActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="newRoundPart" />
+            </intent-filter>
+        </activity>
+
+        <!-- Running Activity -->
+        <activity
+            android:name=".activity.RunningActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="newRoundPart" />
+            </intent-filter>
+        </activity>
+
+        <!-- Result Activity -->
+        <activity
+            android:name=".activity.ResultActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <category android:name="newRoundPart" />
+            </intent-filter>
+        </activity>
+
+        <!-- All Beacon Activity -->
+        <activity
+            android:name=".activity.allBeaconActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <category android:name="newRoundPart" />
+            </intent-filter>
+        </activity>
+
+        <!-- History Activity -->
+        <activity
+            android:name=".activity.historyActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <category android:name="newRoundPart" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.StartActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

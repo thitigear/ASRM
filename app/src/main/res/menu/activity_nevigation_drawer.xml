@@ -3,23 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/drawer_layout">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Home" />
+            android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_allBeacon"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="All Beacon" />
+            android:title="@string/menu_allBeacon" />
         <item
             android:id="@+id/nav_newRound"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="New Round" />
+            android:title="@string/menu_newRound" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_manage"
-            android:title="History" />
+            android:title="@string/menu_history" />
     </group>
 
 </menu>

@@ -9,40 +9,34 @@
     tools:context="com.example.gear.asrm.MainActivity"
     android:background="@color/colorBGPrimary">
 
-    <android.support.design.widget.AppBarLayout
+    <!--android.support.v7.widget.Toolbar
+        android:id="@+id/mainToolbar"
+        app:title="@string/app_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mainToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name"/>
+        >
+    </android.support.v7.widget.Toolbar -->
 
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_main" />
 
     <RelativeLayout
         app:layout_constraintTop_toTopOf="@id/mainConstraint"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <TextView
-            android:id="@+id/textView_body"
-            android:textSize="24sp"
-            android:textColor="@color/textHeader"
-            android:textAlignment="center"
+            android:id="@+id/textView_header"
+            style="@style/textView_header24"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
 
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
-            android:text="@string/tAllSensor"/>
+            android:text="@string/menu_home"/>
         <!-- textView_armL, output_armL, textView_armR, output_armR -->
         <TextView
             android:id="@+id/textView_armL"
@@ -50,7 +44,7 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="60dp"
             android:layout_marginStart="20dp"
             android:text="@string/tArmL" />
         <TextView
@@ -60,26 +54,8 @@
             android:layout_width="90dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="60dp"
             android:layout_marginStart="100dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/textView_armR"
-            android:textColor="@color/textPrimary"
-            android:layout_width="80dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="200dp"
-            android:text="@string/tArmR" />
-        <TextView
-            android:id="@+id/output_armR"
-            android:textColor="@color/textPrimary"
-            android:background="@color/outputTextBackground"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="280dp"
             android:text="" />
 
         <!-- textView_kneeL, output_kneeL, textView_kneeR, output_kneeR -->
@@ -89,7 +65,7 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="90dp"
             android:layout_marginStart="20dp"
             android:text="@string/tKneeL" />
         <TextView
@@ -99,26 +75,8 @@
             android:layout_width="90dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="90dp"
             android:layout_marginStart="100dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/textView_kneeR"
-            android:textColor="@color/textPrimary"
-            android:layout_width="80dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="150dp"
-            android:layout_marginStart="200dp"
-            android:text="@string/tKneeR" />
-        <TextView
-            android:id="@+id/output_kneeR"
-            android:textColor="@color/textPrimary"
-            android:background="@color/outputTextBackground"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-
-            android:layout_marginTop="150dp"
-            android:layout_marginStart="280dp"
             android:text="" />
 
         <!-- textView_ankleL, output_ankleL, textView_ankleR, output_ankleR -->
@@ -128,7 +86,7 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="180dp"
+            android:layout_marginTop="120dp"
             android:layout_marginStart="20dp"
             android:text="@string/tAnkleL" />
         <TextView
@@ -138,26 +96,8 @@
             android:layout_width="90dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="180dp"
+            android:layout_marginTop="120dp"
             android:layout_marginStart="100dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/textView_ankleR"
-            android:textColor="@color/textPrimary"
-            android:layout_width="80dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="180dp"
-            android:layout_marginStart="200dp"
-            android:text="@string/tAnkleR" />
-        <TextView
-            android:id="@+id/output_ankleR"
-            android:textColor="@color/textPrimary"
-            android:background="@color/outputTextBackground"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-
-            android:layout_marginTop="180dp"
-            android:layout_marginStart="280dp"
             android:text="" />
 
         <!-- textView_shinL, output_shinL, textView_shinR, output_shinR -->
@@ -167,7 +107,7 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="210dp"
+            android:layout_marginTop="150dp"
             android:layout_marginStart="20dp"
             android:text="@string/tShinL" />
         <TextView
@@ -177,26 +117,8 @@
             android:layout_width="90dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="210dp"
+            android:layout_marginTop="150dp"
             android:layout_marginStart="100dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/textView_shinR"
-            android:textColor="@color/textPrimary"
-            android:layout_width="80dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="210dp"
-            android:layout_marginStart="200dp"
-            android:text="@string/tShinR" />
-        <TextView
-            android:id="@+id/output_shinR"
-            android:textColor="@color/textPrimary"
-            android:background="@color/outputTextBackground"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-
-            android:layout_marginTop="210dp"
-            android:layout_marginStart="280dp"
             android:text="" />
 
         <!-- textView_angelL, output_angelR, textView_angleR, output_angleR-->
@@ -206,7 +128,7 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="180dp"
             android:layout_marginStart="20dp"
             android:text="@string/tAngleL" />
         <TextView
@@ -216,26 +138,8 @@
             android:layout_width="90dp"
             android:layout_height="20dp"
 
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="180dp"
             android:layout_marginStart="100dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/textView_angleR"
-            android:textColor="@color/textPrimary"
-            android:layout_width="80dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="240dp"
-            android:layout_marginStart="200dp"
-            android:text="@string/tAngleR" />
-        <TextView
-            android:id="@+id/output_angleR"
-            android:textColor="@color/textPrimary"
-            android:background="@color/outputTextBackground"
-            android:layout_width="90dp"
-            android:layout_height="20dp"
-
-            android:layout_marginTop="240dp"
-            android:layout_marginStart="280dp"
             android:text="" />
 
         <!-- Button -->
@@ -254,7 +158,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="270dp"
             android:layout_marginStart="200dp"
-            android:text="@string/button_findAngle" />
+            android:text="Show Result" />
 
     </RelativeLayout>
 

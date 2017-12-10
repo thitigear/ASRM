@@ -1,16 +1,13 @@
 package com.example.gear.asrm;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
+import android.app.Activity;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,14 +18,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.example.gear.asrm.activity.*;
+import com.example.gear.asrm.fragment.*;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
-import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity {
+        //implements NavigationView.OnNavigationItemSelectedListener{
 
     ScanResult scanResult;
     ScanRecord scanRecord;
@@ -41,43 +39,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CoreF core = new CoreF();
     protected Map<String, int[]> deviceList = new HashMap<String, int[]>();
 
-    /*
-       * HMSoft = D4:36:39:DE:56:C6       //
-       * HMSoft = D4:36:39:DE:57:D0       // ankle
-       * HMSensor = 50:8C:B1:75:1C:3C     // shin
-       * HMSensor = 50:8C:B1:75:16:D2]    // knee
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e(TAG, "APP STARTED UP NOW!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-
 /* UI Binding */
         //Define Button
         Button button_showData = (Button) findViewById(R.id.button_getData);
         Button button_findAngel = (Button) findViewById(R.id.button_findAngle);
-
-
-
-
+        //Toolbar app_bar_Toolbar = (Toolbar) findViewById(R.id.mainToolbar);
 
         /* DeviceList Structure
-         * --------------------------------------------------------------------------------
-         * data = Key: capsuleRssiTxPower
-         * capsuleRssiTxPower = {Rssi, TxPowerLevel};
-         * ////////////////////////////////////////////////////////////////////////////////
-         * Device Address
-         * --------------------------------------------------------------------------------
-         * HMSoft = D4:36:39:DE:56:C6       // knee
-         * HMSoft = D4:36:39:DE:57:D0       // ankle
-         * HMSensor = 50:8C:B1:75:1C:3C     // shin
-         * HMSensor = 50:8C:B1:75:16:D2    // arm
-         * ////////////////////////////////////////////////////////////////////////////////
-         * Cal Distance
-         * core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel()))
+           --------------------------------------------------------------------------------
+           data = Key: capsuleRssiTxPower
+           capsuleRssiTxPower = {Rssi, TxPowerLevel};
+           ////////////////////////////////////////////////////////////////////////////////
+           Device Address
+           --------------------------------------------------------------------------------
+           HMSoft = D4:36:39:DE:56:C6       //
+           HMSoft = D4:36:39:DE:57:D0       // ankle
+           HMSensor = 50:8C:B1:75:1C:3C     // shin
+           HMSensor = 50:8C:B1:75:16:D2    // knee
+           ////////////////////////////////////////////////////////////////////////////////
+           Cal Distance
+           core.calculateDistance(scanResult.getRssi(), scanRecord.getTxPowerLevel()))
          */
 
 /* Button Coding */
@@ -211,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         op_shinL.setText(core.getTextDouble(body[3]));
         op_angleL.setText(core.getTextDouble(angleL));
     }
+    /**
     private void setTextTextViewRight(Double[] body) {
         final TextView op_armR = (TextView) findViewById(R.id.output_armR);
         final TextView op_kneeR = (TextView) findViewById(R.id.output_kneeR);
@@ -225,44 +213,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         op_ankleR.setText(core.getTextDouble(body[2]));
         op_shinR.setText(core.getTextDouble(body[3]));
         op_angleR.setText(core.getTextDouble(angleR));
-    }
-
+    }*/
+/**
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        FragmentManager fragmentManager = getFragmentManager();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
 
         if (id == R.id.nav_home){
-
+            fragmentManager.beginTransaction().
+                    replace(R.id.content_frame, new homeFragment()).
+                    commit();
         } else if (id == R.id.nav_newRound){
-
+            fragmentManager.beginTransaction().
+                    replace(R.id.content_frame, new newRoundFragment()).
+                    commit();
         } else if (id == R.id.nav_allBeacon){
+            fragmentManager.beginTransaction().
+                    replace(R.id.content_frame, new allBeaconFragment()).
+                    commit();
 
         } else if (id == R.id.nav_history){
-
+            fragmentManager.beginTransaction().
+                    replace(R.id.content_frame, new historyFragment()).
+                    commit();
         }
+        //DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
+    */
 
     /* Creat OPTION MENU */
-    /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_beacon, menu);
+        getMenuInflater().inflate(R.menu.action_menu, menu);
         return true;
-    }*/
+    }
 
     /* Select MENU ITEM */
-    /*
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_bar_home){
+            return super.onOptionsItemSelected(item);
+        } else if (id == R.id.action_bar_new_round){
+            Intent intent = new Intent(getApplicationContext(), NewRoundActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (id == R.id.action_bar_all_beacon){
+            Intent intent = new Intent(getApplicationContext(), allBeaconActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (id == R.id.action_bar_history){
+            Intent intent = new Intent(getApplicationContext(), historyActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
-*/
-
 
 
 

@@ -17,7 +17,7 @@ public class allBeaconFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.activity_allBeacon, container, false);
+        View myView = inflater.inflate(R.layout.activity_all_beacon, container, false);
         return myView;
     }
 }
