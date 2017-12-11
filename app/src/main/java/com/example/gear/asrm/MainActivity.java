@@ -1,8 +1,12 @@
 package com.example.gear.asrm;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -33,10 +37,9 @@ public class MainActivity extends AppCompatActivity {
     ScanResult scanResult;
     ScanRecord scanRecord;
 
-    /**
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-*/
+
     private static final String TAG = "MainActivity";
     CoreF core = new CoreF();
     protected Map<String, int[]> deviceList = new HashMap<String, int[]>();
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "APP STARTED UP NOW!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 /* UI Binding */
+        final TextView shin = findViewById(R.id.textView_shinL);
+
         //Define Button
         Button button_showData = (Button) findViewById(R.id.button_getData);
         Button button_findAngel = (Button) findViewById(R.id.button_findAngle);
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
 /* Button Coding */
-/**        //Button Get and Show Data
+       //Button Get and Show Data
         button_showData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         /* Get Body */
                 //double arm = core.calculateDistance(deviceList.get("50:8C:B1:75:16:D2")[0], deviceList.get("50:8C:B1:75:16:D2")[1]);
                 //Log.e(TAG, "///////////////////////Arm :" + arm);
-/**                double knee = core.calculateDistance(deviceList.get("50:8C:B1:75:1C:3C")[0], deviceList.get("50:8C:B1:75:1C:3C")[1]);
+                double knee = core.calculateDistance(deviceList.get("50:8C:B1:75:1C:3C")[0], deviceList.get("50:8C:B1:75:1C:3C")[1]);
                 Log.e(TAG, "///////////////////////Knee :" + knee);
                 double ankle = core.calculateDistance(deviceList.get("D4:36:39:DE:57:D0")[0], (deviceList.get("D4:36:39:DE:57:D0")[1]) - 20);
                 Log.e(TAG, "///////////////////////Ankle :" + ankle);
@@ -109,37 +114,23 @@ public class MainActivity extends AppCompatActivity {
                     setTextTextView(body);
                     count = 0;
                 }
-
+*/
                 //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
           }
         });
- */
-/*
-        //Show/Find Beacon
-        button_findAngel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-                // IMPORTANT: in the AndroidManifest.xml definition of this activity, you must set android:launchMode="singleInstance" or you will get two instances
-                // created when a user launches the activity manually and it gets launched from here.
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-            }
-        });
-*/
 
 /* Bluetooth Scan to Find Beacon */
-/**        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
+        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
         scanSettingsBuilder.setReportDelay(0);
+
 
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
 
-                op_find.setText("" + deviceList.size());
+                shin.setText("" + deviceList.size());
                 scanResult = result;
 
                 if (scanResult.getDevice().getName() != null) {
@@ -149,11 +140,11 @@ public class MainActivity extends AppCompatActivity {
                             deviceList.keySet());
                     if (deviceList.containsKey(scanResult.getDevice().getAddress())) {
                         /* Update Device Rssi & TxPowerLevel */
-/**                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
+                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
 
                     } else {
                         /* Add Device to DeviceList */
-/**                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
+                        deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
                     }
 /*
                     if (deviceList.size() >= 3) {
@@ -168,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 */
-/**                }
+              }
             }
         });
 
@@ -187,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView op_armL = (TextView) findViewById(R.id.output_armL);
         final TextView op_kneeL = (TextView) findViewById(R.id.output_kneeL);
         final TextView op_ankleL = (TextView) findViewById(R.id.output_ankleL);
-        final TextView op_shinL = (TextView) findViewById(R.id.output_shinL);
+        //final TextView op_shinL = (TextView) findViewById(R.id.output_shinL);
         final TextView op_angleL = (TextView) findViewById(R.id.output_angleL);
 
         //final  TextView op_found =
@@ -197,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         op_armL.setText(core.getTextDouble(body[0]));
         op_kneeL.setText(core.getTextDouble(body[1]));
         op_ankleL.setText(core.getTextDouble(body[2]));
-        op_shinL.setText(core.getTextDouble(body[3]));
+        //op_shinL.setText(core.getTextDouble(body[3]));
         op_angleL.setText(core.getTextDouble(angleL));
     }
     /**
