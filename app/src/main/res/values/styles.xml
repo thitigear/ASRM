@@ -59,4 +59,12 @@
         <item name="android:divider">#878787</item>
         <item name="android:dividerHeight">2dp</item>
     </style>
+
+    <style name="text_Loading">
+        <item name="android:text">Loading</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">50dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

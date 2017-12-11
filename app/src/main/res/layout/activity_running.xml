@@ -11,7 +11,8 @@
         android:id="@+id/running_layout_Relative"
         app:layout_constraintTop_toTopOf="@id/running_layout_Constraint"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/BGSecondary">
 
         <Button
             android:id="@+id/running_button_stopScan"
@@ -24,9 +25,10 @@
 
         <ImageView
             android:id="@+id/running_imageView_running"
-            android:background="@color/BGSecondary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:background="@drawable/asrm_logo"
+            android:layout_width="384dp"
+            android:layout_height="384dp"
+            android:layout_marginTop="20dp"/>
 
     </RelativeLayout>
 

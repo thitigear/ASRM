@@ -4,11 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gear.asrm.activity.StartActivity">
+    tools:context="com.example.gear.asrm.activity.StartActivity"
+    android:id="@+id/start_layout_Constraint">
 
-    <ImageView android:id="@+id/start_imageView"
-        android:background="@drawable/mafia_giraffe_n_png"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        app:layout_constraintTop_toTopOf="@id/start_layout_Constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView android:id="@+id/start_imageView"
+            android:background="@drawable/asrm_logo"
+            android:layout_width="match_parent"
+            android:layout_height="384dp"
+            android:layout_marginTop="60dp" />
+        <TextView
+            android:text="Loading .."
+            style="@style/text_Loading"
+            android:background="@color/BGPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="444dp"/>
+
+    </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>
