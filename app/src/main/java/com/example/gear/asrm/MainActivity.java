@@ -11,10 +11,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
           }
         });
  */
-
+/*
         //Show/Find Beacon
         button_findAngel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+*/
 
 /* Bluetooth Scan to Find Beacon */
 /**        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();

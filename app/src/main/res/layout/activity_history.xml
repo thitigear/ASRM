@@ -2,15 +2,47 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/history_layout_Constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.gear.asrm.activity.historyActivity">
 
-    <TextView
-        android:id="@+id/history_textView_Header"
-        android:text="@string/menu_history"
-        style="@style/textView_header24"
-        android:textColor="@color/textHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout android:id="@+id/history_layout_Relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView android:id="@+id/history_textView_Header"
+            android:text="@string/history_textView_header"
+            style="@style/textView_header24"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView android:text="@string/under_header_line"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:textScaleX="30"
+            android:textAlignment="center"
+            android:textColor="#69c7d2"/>
+
+        <ListView android:id="@+id/history_listView_showHistory"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="80dp"
+            android:layout_centerHorizontal="true"
+            style="@style/listView_1"/>
+
+        <Button android:id="@+id/history_button_clearHistory"
+            android:text="@string/history_button_clearHistory"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            style="@style/button_RED"
+            android:layout_marginTop="400dp"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

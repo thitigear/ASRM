@@ -17,14 +17,46 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="textView_header24">
-        <item name="android:textSize">24dp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textHeader</item>
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="textView_header30">
-        <item name="android:textSize">30dp</item>
-        <item name="android:textColor">@color/textHeader</item>
+    <style name="font_bold_text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="font_italic_text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="font_description">
+    </style>
+
+    <style name="button_WHITE">
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/button_rounded</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/BGPrimary</item>
         <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="button_RED">
+        <item name="android:background">@drawable/button_rounded_red</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/BGPrimary</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="listView_1">
+        <item name="android:scrollbarStyle">insideOverlay</item>
+        <item name="android:scrollbarSize">10dp</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:divider">#878787</item>
+        <item name="android:dividerHeight">2dp</item>
     </style>
 </resources>

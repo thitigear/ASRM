@@ -28,34 +28,43 @@
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.GET_CONTENT" />
+
+            </intent-filter>
+        </activity>
+
+        <!-- Start Activity -->
+        <activity android:name=".activity.StartActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- New Round Activity -->
-        <activity
-            android:name=".activity.NewRoundActivity"
+        <activity android:name=".activity.NewRoundActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
+
                 <category android:name="newRoundPart" />
             </intent-filter>
         </activity>
 
         <!-- Running Activity -->
-        <activity
-            android:name=".activity.RunningActivity"
+        <activity android:name=".activity.RunningActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
+
                 <category android:name="newRoundPart" />
             </intent-filter>
         </activity>
 
         <!-- Result Activity -->
-        <activity
-            android:name=".activity.ResultActivity"
+        <activity android:name=".activity.ResultActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
@@ -65,8 +74,7 @@
         </activity>
 
         <!-- All Beacon Activity -->
-        <activity
-            android:name=".activity.allBeaconActivity"
+        <activity android:name=".activity.allBeaconActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
@@ -76,18 +84,20 @@
         </activity>
 
         <!-- History Activity -->
-        <activity
-            android:name=".activity.historyActivity"
+        <activity android:name=".activity.historyActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
 
-                <category android:name="newRoundPart" />
+                <category android:name="historyPart" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.StartActivity">
+        <!-- History Result Activity -->
+        <activity android:name=".activity.HistoryResultActivity">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <category android:name="historyPart" />
             </intent-filter>
         </activity>
     </application>

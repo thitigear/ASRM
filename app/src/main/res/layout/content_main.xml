@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.gear.asrm.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:background="@color/colorBGPrimary">
+    android:background="@color/BGPrimary">
 
     <FrameLayout
         android:id="@+id/content_frame"

@@ -25,6 +25,12 @@
     <string name="menu_newRound">New Round</string>
     <string name="menu_history">History</string>
 
+    <!--New Round Activity -->
+    <string name="newRound_button_startRound">Start Running</string>
+
+    <!-- RunningActivity -->
+    <string name="running_button_stopScan">Stop Running</string>
+
     <!-- ResultActivity -->
     <string name="tResult_RoundSummary">Round Summary</string>
     <string name="tResult_LeftPercent">Left :</string>
@@ -37,4 +43,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="under_header_line">_</string>
+
+    <!-- allBeaconActivity -->
+    <string name="allbeacon_textView_device_connect">Connected</string>
+    <string name="allbeacon_textView_device_not_found">Not Found</string>
+
+    <!-- historyActivity -->
+    <string name="history_textView_header">Round History</string>
+    <string name="history_button_clearHistory">Clear History</string>
+
 </resources>

@@ -6,13 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.gear.asrm.activity.StartActivity">
 
-    <TextView
-        android:id="@+id/start_textView_Header"
-        android:text="Start App"
-        style="@style/textView_header24"
+    <ImageView android:id="@+id/start_imageView"
+        android:background="@drawable/mafia_giraffe_n_png"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="100dp"/>
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>

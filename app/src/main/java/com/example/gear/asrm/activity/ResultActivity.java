@@ -31,9 +31,7 @@ public class ResultActivity extends AppCompatActivity {
         button_OK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -42,15 +40,17 @@ public class ResultActivity extends AppCompatActivity {
         //create Angle Image
     }
 
-    private void setTextView(){
+    private void setTextView(String data){
         //set Result Activity TextViews
     }
 
-    private void getResultData(){
-        //get Data from Database
+    private String getResultData(){
+        //get Data from Database and return TYPE
+        return "DATA";
     }
 
     private String calculateMotionGrade(){
         return "Good!";
     }
+
 }

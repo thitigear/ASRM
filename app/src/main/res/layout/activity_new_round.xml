@@ -2,22 +2,33 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newRound_layout_Constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gear.asrm.activity.NewRoundActivity">
+    tools:context="com.example.gear.asrm.activity.RunningActivity">
 
     <RelativeLayout
-        android:layout_width="370dp"
-        android:layout_height="510dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_marginTop="100dp">
+        android:id="@+id/newRound_layout_Relative"
+        app:layout_constraintTop_toTopOf="@id/running_layout_Constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/newRound_textView_Header"
-            android:text="@string/menu_newRound"
-            style="@style/textView_header24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/newRound_button_StartRound"
+            android:text="@string/newRound_button_startRound"
+            style="@style/button_WHITE"
+            android:background="@color/buttonBackground"
+            android:layout_marginTop="420dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <ImageView
+            android:id="@+id/newRound_imageView_running"
+            style="@style/button_WHITE"
+            android:background="@color/BGSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

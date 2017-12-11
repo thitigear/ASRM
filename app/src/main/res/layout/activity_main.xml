@@ -1,35 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    android:id="@+id/mainConstraint"
+    android:id="@+id/main_layout_Constraint"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.gear.asrm.MainActivity"
-    android:background="@color/colorBGPrimary">
+    android:background="@color/BGPrimary">
 
-    <!--android.support.v7.widget.Toolbar
-        android:id="@+id/mainToolbar"
-        app:title="@string/app_name"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-
-        >
-    </android.support.v7.widget.Toolbar -->
-
-
-    <RelativeLayout
-        app:layout_constraintTop_toTopOf="@id/mainConstraint"
+    <RelativeLayout android:id="@+id/main_layout_Relative"
+        app:layout_constraintTop_toTopOf="@id/main_layout_Constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView_header"
+            android:id="@+id/main_textView_header"
             style="@style/textView_header24"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -145,7 +131,7 @@
         <!-- Button -->
         <Button
             android:id="@+id/button_getData"
-            android:background="@color/colorPrimary"
+            style="@style/button_WHITE"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginTop="270dp"
@@ -153,7 +139,7 @@
             android:text="@string/button_getData" />
         <Button
             android:id="@+id/button_findAngle"
-            android:background="@color/colorPrimary"
+            style="@style/button_WHITE"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginTop="270dp"
@@ -161,5 +147,11 @@
             android:text="Show Result" />
 
     </RelativeLayout>
+
+    <FrameLayout android:id="@+id/main_layout_Frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
 
 </android.support.constraint.ConstraintLayout>
