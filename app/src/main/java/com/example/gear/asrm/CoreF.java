@@ -1,10 +1,13 @@
 package com.example.gear.asrm;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Created by Gear on 12/10/2560.
  */
 
-class CoreF {
+class CoreF extends AppCompatActivity{
     // Double[] bodyHalf = {armL, kneeL, ankleL, shinL constant}
 
     public CoreF() {

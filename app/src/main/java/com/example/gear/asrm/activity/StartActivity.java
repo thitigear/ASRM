@@ -24,7 +24,6 @@ public class StartActivity extends AppCompatActivity {
         stopScan();
 
         Thread welcomeThread = new Thread() {
-
             @Override
             public void run() {
                 try {

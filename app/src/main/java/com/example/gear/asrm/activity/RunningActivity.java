@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.gear.asrm.MainActivity;
 import com.example.gear.asrm.R;
 
 public class RunningActivity extends AppCompatActivity {
@@ -41,4 +42,12 @@ public class RunningActivity extends AppCompatActivity {
     }
 
     private void stopScan(){}
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 }

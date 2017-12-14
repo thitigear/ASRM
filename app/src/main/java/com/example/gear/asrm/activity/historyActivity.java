@@ -54,6 +54,9 @@ public class historyActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_bar_home){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         } else if (id == R.id.action_bar_new_round){
             Intent intent = new Intent(getApplicationContext(), NewRoundActivity.class);
@@ -70,5 +73,13 @@ public class historyActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

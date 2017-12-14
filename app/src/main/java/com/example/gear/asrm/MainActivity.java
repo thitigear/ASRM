@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +30,10 @@ import android.widget.Toolbar;
 import com.example.gear.asrm.activity.*;
 import com.example.gear.asrm.fragment.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "APP STARTED UP NOW!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 /* UI Binding */
-        final TextView shin = findViewById(R.id.textView_shinL);
+        final TextView shin = findViewById(R.id.output_shinL);
+        final TextView tShin = findViewById(R.id.textView_shinL);
+        tShin.setText("Found : ");
 
         //Define Button
         Button button_showData = (Button) findViewById(R.id.button_getData);
@@ -96,33 +104,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "///////////////////////Ankle :" + ankle);
                 double shin = 40.0;
                 setTextTextViewLeft(core.getBodyHalf(999,knee, ankle, shin));
-/*
-                if (count == 0) {
-                    body = core.getBody1();
-                    setTextTextView(body);
-                    count++;
-                } else if (count == 1) {
-                    body = core.getBody2();
-                    setTextTextView(body);
-                    count++;
-                } else if (count == 2) {
-                    body = core.getBody3();
-                    setTextTextView(body);
-                    count++;
-                } else {
-                    body = core.getDefaultBody();
-                    setTextTextView(body);
-                    count = 0;
-                }
-*/
+
                 //Log.e(TAG, "scanRecord manufact : " + scanRecord.getManufacturerSpecificData(224).toString());
           }
         });
 
 
 /* Bluetooth Scan to Find Beacon */
-        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
-        scanSettingsBuilder.setReportDelay(0);
+        //ScanFilter.Builder setManufacturerData (int manufacturerId, byte[] manufacturerData, byte[] manufacturerDataMask).
+/**
+        scanFilterList.add(new ScanFilter.Builder().setDeviceAddress("50:8C:B1:75:16:D2").setDeviceName("HMSensor").build());
+        scanFilterList.add(new ScanFilter.Builder().setDeviceAddress("D4:36:39:DE:57:D0").setDeviceName("HMSoft").build());
+
+        scanFilterList.add(new ScanFilter.Builder().setDeviceAddress("50:8C:B1:75:1C:3C").setDeviceName("HMSensor").build());
+        scanFilterList.add(new ScanFilter.Builder().setDeviceAddress("D4:36:39:DE:56:C6").setDeviceName("HMSoft").build());
+
+        ScanSettings scanSettingsBuilder = new ScanSettings.Builder().setReportDelay(0).build();
+*/
 
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
@@ -145,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                         /* Add Device to DeviceList */
                         deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
                     }
-
               }
             }
         });
@@ -237,20 +234,35 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), NewRoundActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
         } else if (id == R.id.action_bar_all_beacon){
             Intent intent = new Intent(getApplicationContext(), allBeaconActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
         } else if (id == R.id.action_bar_history){
             Intent intent = new Intent(getApplicationContext(), historyActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-
-
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        setResult(RESULT_OK, new Intent().putExtra("EXIT", true));
+                        finish();
+                    }
+                }).create().show();
+    }
 }
