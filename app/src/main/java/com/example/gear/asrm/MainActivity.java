@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
         scanSettingsBuilder.setReportDelay(0);
 
-
         bluetoothLeScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
@@ -146,30 +145,11 @@ public class MainActivity extends AppCompatActivity {
                         /* Add Device to DeviceList */
                         deviceList.put(scanResult.getDevice().getAddress(), capsuleRssiTxPower);
                     }
-/*
-                    if (deviceList.size() >= 3) {
-                        long start = System.currentTimeMillis();
-                        long elapsedTimeMillis = System.currentTimeMillis()-start;
-                        while(elapsedTimeMillis < 2){
-                            //op_kneeL.setText("" + core.calculateDistance(deviceList.get("D4:36:39:DE:56:C6")[0], deviceList.get("D4:36:39:DE:56:C6")[1]));
-                            op_kneeL.setText("" + core.calculateDistance(deviceList.get("50:8C:B1:75:1C:3C")[0], deviceList.get("50:8C:B1:75:1C:3C")[1]));
-                            op_ankleL.setText("" + core.calculateDistance(deviceList.get("D4:36:39:DE:57:D0")[0], deviceList.get("D4:36:39:DE:57:D0")[1]-20));
-                            start = System.currentTimeMillis();
-                        }
 
-                    }
-*/
               }
             }
         });
 
-        /*
-        * Intent intent = new Intent(this, MainActivity);
-        * // IMPORTANT: in the AndroidManifest.xml definition of this activity, you must set android:launchMode="singleInstance" or you will get two instances
-        * // created when a user launches the activity manually and it gets launched from here.
-        * intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        * this.startActivity(intent);
-        */
 
     }
 
